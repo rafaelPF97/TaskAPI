@@ -1,10 +1,10 @@
-package br.com.rafapf.TaskAPI;
+package br.com.rafapf.task;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TaskApiApplicationTests {
+class TaskApplicationTests {
 
 	@Test
 	void contextLoads() {

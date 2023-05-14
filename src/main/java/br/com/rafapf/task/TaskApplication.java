@@ -1,13 +1,13 @@
-package br.com.rafapf.TaskAPI;
+package br.com.rafapf.task;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TaskApiApplication {
+public class TaskApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TaskApiApplication.class, args);
+		SpringApplication.run(TaskApplication.class, args);
 	}
 
 }
