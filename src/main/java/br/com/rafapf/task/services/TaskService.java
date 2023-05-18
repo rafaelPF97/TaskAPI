@@ -5,6 +5,7 @@ import br.com.rafapf.task.repositories.TaskRepository;
 import br.com.rafapf.task.utils.enums.TaskStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +33,8 @@ public class TaskService {
         if(taskSave.isPresent() && !taskSave.get().getStatus().equals(TaskStatus.DONE)){
             throw new RuntimeException("This task already exists and is not done");
         }
-        task.setStatus(TaskStatus.TODO);
+        task.setLate(LocalDate.now().isAfter(task.getDeadLine()));
+
         repository.save(task);
         return task;
     }
@@ -47,6 +49,7 @@ public class TaskService {
         taskSave.setDescription(newTask.getDescription());
         taskSave.setStatus(newTask.getStatus());
         taskSave.setDeadLine(newTask.getDeadLine());
+        taskSave.setLate(LocalDate.now().isAfter(newTask.getDeadLine()));
         repository.save(taskSave);
         return taskSave;
     }
