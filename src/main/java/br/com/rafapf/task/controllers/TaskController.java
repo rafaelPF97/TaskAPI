@@ -1,5 +1,8 @@
 package br.com.rafapf.task.controllers;
 
+import br.com.rafapf.task.controllers.dtos.TaskCreateDTO;
+import br.com.rafapf.task.controllers.dtos.TaskDTO;
+import br.com.rafapf.task.controllers.dtos.TaskUpdateDTO;
 import br.com.rafapf.task.models.Task;
 import br.com.rafapf.task.services.TaskService;
 import jakarta.validation.Valid;
@@ -30,13 +33,15 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Task createTask(@RequestBody @Valid Task task){
-        return service.createTask(task);
+    public TaskDTO createTask(@RequestBody @Valid TaskCreateDTO taskDTO){
+        Task taskSaved = service.createTask(taskDTO.toEntity());
+        return TaskDTO.from(taskSaved);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable UUID id, @Valid @RequestBody Task task){
-        return service.updateTask(id, task);
+    public TaskDTO updateTask(@PathVariable UUID id, @Valid @RequestBody TaskUpdateDTO taskDTO){
+        Task taskUpdated = service.updateTask(id, taskDTO.toEntity());
+        return TaskDTO.from(taskUpdated);
     }
 
     @DeleteMapping("/{id}")

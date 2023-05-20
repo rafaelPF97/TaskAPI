@@ -2,11 +2,6 @@ package br.com.rafapf.task.models;
 
 import br.com.rafapf.task.utils.enums.TaskStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -18,34 +13,28 @@ public class Task {
     @Column(name = "cd_task")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @NotBlank
     @Column(name = "nm_task")
     private String name;
     @Column(name = "st_task")
     private TaskStatus status = TaskStatus.TODO;
-    @NotBlank
     @Column(name = "ds_task")
     private String description;
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "dt_task")
     private LocalDate deadLine;
     @Column(name = "fl_task")
     private boolean isLate;
 
-    public Task(UUID id, String name, String description, LocalDate deadLine, boolean isLate) {
+    public Task(UUID id, String name, String description, LocalDate deadLine) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.deadLine = deadLine;
-        this.isLate = isLate;
     }
 
-    public Task(String name, String description, LocalDate deadLine, boolean isLate) {
+    public Task(String name, String description, LocalDate deadLine) {
         this.name = name;
         this.description = description;
         this.deadLine = deadLine;
-        this.isLate = isLate;
     }
 
     public Task() {

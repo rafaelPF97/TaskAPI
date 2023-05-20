@@ -1,5 +1,8 @@
 package br.com.rafapf.task.services;
 
+import br.com.rafapf.task.exceptions.TaskAlreadyDoneException;
+import br.com.rafapf.task.exceptions.TaskAlreadyExistsException;
+import br.com.rafapf.task.exceptions.TaskNotFoundException;
 import br.com.rafapf.task.models.Task;
 import br.com.rafapf.task.repositories.TaskRepository;
 import br.com.rafapf.task.utils.enums.TaskStatus;
@@ -25,13 +28,13 @@ public class TaskService {
 
     public Task findById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
     }
 
     public Task createTask(Task task){
         Optional<Task> taskSave = repository.findByName(task.getName());
         if(taskSave.isPresent() && !taskSave.get().getStatus().equals(TaskStatus.DONE)){
-            throw new RuntimeException("This task already exists and is not done");
+            throw new TaskAlreadyExistsException("This task already exists and is not done");
         }
         task.setLate(LocalDate.now().isAfter(task.getDeadLine()));
 
@@ -43,7 +46,7 @@ public class TaskService {
         var taskSave = findById(id);
         Optional<Task> taskAlreadySaved = repository.findByName(newTask.getName());
         if(taskAlreadySaved.isPresent() && taskAlreadySaved.get().getStatus().equals(TaskStatus.DONE)){
-            throw new RuntimeException("This task already done");
+            throw new TaskAlreadyDoneException("This task already done");
         }
         taskSave.setName(newTask.getName());
         taskSave.setDescription(newTask.getDescription());
@@ -51,14 +54,16 @@ public class TaskService {
         taskSave.setDeadLine(newTask.getDeadLine());
         taskSave.setLate(LocalDate.now().isAfter(newTask.getDeadLine()));
         repository.save(taskSave);
+
         return taskSave;
     }
 
     public void removeTaskById(UUID id){
         var task = findById(id);
         if(task.getStatus().equals(TaskStatus.DONE)){
-            throw new RuntimeException("This task is already done");
+            throw new TaskAlreadyDoneException("This task is already done");
         }
         repository.delete(task);
     }
+
 }
